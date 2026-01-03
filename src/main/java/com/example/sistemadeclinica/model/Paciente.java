@@ -26,6 +26,6 @@ public class Paciente {
 
     @ManyToOne
     @JoinColumn(name = "ID_AGENDA")
-    private Agenda agenda;
+    private Consulta agenda;
 
 }

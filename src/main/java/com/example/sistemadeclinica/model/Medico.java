@@ -1,25 +1,57 @@
 package com.example.sistemadeclinica.model;
 
+import com.example.sistemadeclinica.model.enuns.Especialidade;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
+@Table(name = "medico")
+@Entity(name = "Medico")
+@Getter
 @NoArgsConstructor
-@Entity
-@Builder
-@SequenceGenerator(name = "seq_medico" , sequenceName = "seq_medico", allocationSize = 1)
+@EqualsAndHashCode(of = "id")
 public class Medico {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_medico")
-    @Column(name = "ID_MEDICO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
-    private String especialidade;
+    private String email;
+    private String crm;
+    private String telefone;
+    private Boolean ativo;
 
+    @Enumerated(EnumType.STRING)
+    private Especialidade especialidade;
+
+    @Embedded
+    private Endereco endereco;
+
+    public static Medico criar(CriarMedicoDto medicoDto) {
+        var medico = new Medico();
+        medico.nome = medicoDto.nome();
+        medico.email = medicoDto.email();
+        medico.crm = medicoDto.crm();
+        medico.telefone = medicoDto.telefone();
+        medico.especialidade = medicoDto.especialidade();
+        medico.endereco = Endereco.criar(medicoDto.endereco());
+        medico.ativo = true;
+        return medico;
+    }
+
+    public void atualizar(AtualizarMedicoDto atualizarMedicoDto) {
+        if (Objects.nonNull(atualizarMedicoDto.nome())) {
+            this.nome = atualizarMedicoDto.nome();
+        }
+        if (Objects.nonNull(atualizarMedicoDto.telefone())) {
+            this.telefone = atualizarMedicoDto.telefone();
+        }
+        if (Objects.nonNull(atualizarMedicoDto.endereco())) {
+            this.endereco.atualizar(atualizarMedicoDto.endereco());
+        }
+    }
+
+    public void inativar() {
+        this.ativo = false;
+    }
 }

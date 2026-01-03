@@ -1,73 +1,63 @@
 package com.example.sistemadeclinica.service.impl;
 
-import com.example.sistemadeclinica.adapter.*;
-import com.example.sistemadeclinica.dto.AgendaDTO;
-import com.example.sistemadeclinica.dto.AgendaViewDTO;
-import com.example.sistemadeclinica.dto.PacienteDTO;
-import com.example.sistemadeclinica.dto.PacienteViewDTO;
-import com.example.sistemadeclinica.model.Agenda;
-import com.example.sistemadeclinica.model.Paciente;
-import com.example.sistemadeclinica.repository.AgendaRepository;
+
+import com.example.sistemadeclinica.dto.AgendarConsultaDto;
+import com.example.sistemadeclinica.dto.DetalhesConsultaDto;
+import com.example.sistemadeclinica.exception.EspecialidadeNaoEncontradaException;
+import com.example.sistemadeclinica.exception.PacienteNaoEncontradoException;
+import com.example.sistemadeclinica.model.Consulta;
+import com.example.sistemadeclinica.model.enuns.Especialidade;
+import com.example.sistemadeclinica.model.Medico;
+import com.example.sistemadeclinica.repository.ConsultaRepository;
+import com.example.sistemadeclinica.repository.MedicoRepository;
 import com.example.sistemadeclinica.repository.PacienteRepository;
 import com.example.sistemadeclinica.service.AgendaPacienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.sistemadeclinica.validators.AgendarConsultaValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 
+    private final ConsultaRepository consultaRepository;
 
-    @Autowired
-    private AgendaRepository agendaRepository;
+    private final PacienteRepository pacienteRepository;
 
-    @Autowired
-    private PacienteRepository pacienteRepository;
+    private final MedicoRepository medicoRepository;
+
+    private final List<AgendarConsultaValidator> consultaAgendarValidators;
+
 
     @Override
-    public void adicionar(AgendaDTO agendaDTO) {
+    @Transactional
+    public DetalhesConsultaDto agendar(AgendarConsultaDto consultaDto) {
+        var paciente = pacienteRepository.findById(consultaDto.idPaciente()).orElseThrow(() ->
+                new PacienteNaoEncontradoException("Id do paciente informado não existe!"));
 
-        Agenda agenda = new AgendaModelAdapter(agendaDTO).getAgenda();
-        agendaRepository.save(agenda);
+        var medico = obterMedico(consultaDto.idMedico(), consultaDto.especialidade(), consultaDto.dataDe(), consultaDto.dataAte());
+        var consulta = Consulta.agendar(paciente, medico, consultaDto.dataDe(), consultaDto.dataAte());
+
+        consultaAgendarValidators.forEach(v -> v.validate(consulta));
+
+        return new DetalhesConsultaDto(consultaRepository.save(consulta));
     }
 
-    @Override
-    public void remover(Long id, String cpf) throws Exception {
 
-       Agenda agenda =  agendaRepository.findById(id).orElseThrow(()-> new Exception("Agenda não Encontrada"));
-       Paciente paciente = pacienteRepository.findByCpf(cpf);
-       agenda.getPacientes().remove(paciente);
-       agendaRepository.save(agenda);
 
-    }
-
-    @Override
-    public PacienteViewDTO pesquisar(Long id, String cpf) throws Exception {
-
-        Agenda agenda =  agendaRepository.findById(id).orElseThrow(()-> new Exception("Agenda não Encontrada"));
-        Paciente paciente = pacienteRepository.findByCpf(cpf);
-        PacienteViewDTO pacienteDTO = new PacienteViewDTO();
-
-        for(Paciente p : agenda.getPacientes()){
-
-            if(p.equals(paciente)){
-
-                pacienteDTO = new PacienteViewDTOAdapter(paciente).getPacienteDTO();
-                break;
-
-            }
-
+    private Medico obterMedico(Long idMedico, Especialidade especialidade, LocalDateTime dataDe, LocalDateTime dataAte) {
+        if (Objects.nonNull(idMedico)) {
+            return medicoRepository.getReferenceById(idMedico);
         }
-
-        return pacienteDTO;
-
-    }
-
-    @Override
-    public AgendaViewDTO listarTodosPacientes(Long id) throws Exception {
-        Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> new Exception("Agenda não encontrada"));
-        return new AgendaViewDTOAdapter(agenda).getAgendaDTO();
+        if (Objects.isNull(especialidade)) {
+            throw new EspecialidadeNaoEncontradaException("Especialidade é obrigatória quando médico não for escolhido!");
+        }
+        return medicoRepository.escolherMedicoAleatorioLivreNaData(especialidade, dataDe, dataAte);
     }
 
 
