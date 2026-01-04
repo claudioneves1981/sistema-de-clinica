@@ -1,8 +1,12 @@
 package com.example.sistemadeclinica.model;
 
+import com.example.sistemadeclinica.dto.AtualizarMedicoDto;
+import com.example.sistemadeclinica.dto.CriarMedicoDto;
 import com.example.sistemadeclinica.model.enuns.Especialidade;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Objects;
 
 @Table(name = "medico")
 @Entity(name = "Medico")

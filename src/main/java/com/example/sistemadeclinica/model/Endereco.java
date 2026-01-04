@@ -1,9 +1,12 @@
 package com.example.sistemadeclinica.model;
 
+import com.example.sistemadeclinica.dto.EnderecoDto;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 @Embeddable
 @Getter
