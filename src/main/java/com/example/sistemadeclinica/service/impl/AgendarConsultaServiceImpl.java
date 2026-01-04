@@ -11,7 +11,7 @@ import com.example.sistemadeclinica.model.Medico;
 import com.example.sistemadeclinica.repository.ConsultaRepository;
 import com.example.sistemadeclinica.repository.MedicoRepository;
 import com.example.sistemadeclinica.repository.PacienteRepository;
-import com.example.sistemadeclinica.service.AgendaPacienteService;
+import com.example.sistemadeclinica.service.AgendarConsultaService;
 import com.example.sistemadeclinica.validators.AgendarConsultaValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class AgendaPacienteServiceImpl implements AgendaPacienteService {
+public class AgendarConsultaServiceImpl implements AgendarConsultaService {
 
     private final ConsultaRepository consultaRepository;
 
