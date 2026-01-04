@@ -1,11 +1,16 @@
 package com.example.sistemadeclinica.security;
 
+import com.example.sistemadeclinica.exception.InvalidJwtException;
+import com.example.sistemadeclinica.model.Usuario;
 import com.example.sistemadeclinica.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -65,6 +70,33 @@ public class JWTCreator {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public Usuario getCurrentUser() {
+        UserDetails userDetails = getAuthentication();
+        if (userDetails != null) {
+            String username = userDetails.getUsername();
+            return userRepository.findByLogin(username)
+                    .orElseThrow(() -> new InvalidJwtException("User not found with email: " + username));
+        }
+        throw new InvalidJwtException("No authenticated user found");
+    }
+
+    public UserDetails getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        boolean isRoleAnonymous = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ANONYMOUS"));
+
+        if (!isRoleAnonymous) {
+            return (UserDetails) authentication.getPrincipal();
+        }
+        return null;
+    }
+
+
 
     /*public String getSubject(@NotNull String token) {
         var algorithm = Algorithm.HMAC256(secret);
