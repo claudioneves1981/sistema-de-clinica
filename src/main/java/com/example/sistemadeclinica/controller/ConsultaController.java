@@ -5,7 +5,7 @@ import com.example.sistemadeclinica.dto.CancelarConsultaDto;
 import com.example.sistemadeclinica.dto.DetalhesConsultaDto;
 import com.example.sistemadeclinica.service.AgendarConsultaService;
 import com.example.sistemadeclinica.service.CancelarConsultaService;
-import com.example.sistemadeclinica.service.DetalhesConsultaService;
+import com.example.sistemadeclinica.service.ConsultaService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class ConsultaController {
 
-    private final DetalhesConsultaService detalhesConsultaService;
+    private final ConsultaService detalhesConsultaService;
     private final AgendarConsultaService agendarConsultaService;
     private final CancelarConsultaService cancelarConsultaService;
 
     @GetMapping("/{idConsulta}")
-    public ResponseEntity<DetalhesConsultaDto> detalhes(@PathVariable Long id) {
-        return ResponseEntity.ok(detalhesConsultaService.detalhes(id));
+    public ResponseEntity<DetalhesConsultaDto> detalhes(@PathVariable Long idConsulta) {
+        return ResponseEntity.ok(detalhesConsultaService.getById(idConsulta));
     }
 
     @PostMapping("/agendamento")

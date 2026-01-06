@@ -1,9 +1,10 @@
 package com.example.sistemadeclinica.service.impl;
 
 import com.example.sistemadeclinica.dto.DetalhesConsultaDto;
+import com.example.sistemadeclinica.dto.DetalhesPacienteDto;
 import com.example.sistemadeclinica.model.Consulta;
 import com.example.sistemadeclinica.repository.ConsultaRepository;
-import com.example.sistemadeclinica.service.DetalhesConsultaService;
+import com.example.sistemadeclinica.service.ConsultaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,25 +14,18 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class DetalhesConsultaServiceImpl implements DetalhesConsultaService {
+public class ConsultaServiceImpl implements ConsultaService {
 
     private final ConsultaRepository consultaRepository;
 
 
+
     @Override
     @Transactional
-    public DetalhesConsultaDto detalhes(Long idConsulta){
+    public DetalhesConsultaDto getById(Long id){
 
-        return new DetalhesConsultaDto(Objects.requireNonNull(obterConsulta(idConsulta)));
+        var consulta = consultaRepository.getReferenceById(id);
+        return new DetalhesConsultaDto(consulta);
 
-    }
-
-    private Consulta obterConsulta(Long idConsulta) {
-
-        if (Objects.nonNull(idConsulta)) {
-            return consultaRepository.getReferenceById(idConsulta);
-        }
-
-        return null;
     }
 }

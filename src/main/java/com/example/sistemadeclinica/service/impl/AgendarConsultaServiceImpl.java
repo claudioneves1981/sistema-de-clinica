@@ -12,7 +12,7 @@ import com.example.sistemadeclinica.repository.ConsultaRepository;
 import com.example.sistemadeclinica.repository.MedicoRepository;
 import com.example.sistemadeclinica.repository.PacienteRepository;
 import com.example.sistemadeclinica.service.AgendarConsultaService;
-import com.example.sistemadeclinica.validators.AgendarConsultaValidator;
+import com.example.sistemadeclinica.validators.consulta.agendamento.AgendarConsultaValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

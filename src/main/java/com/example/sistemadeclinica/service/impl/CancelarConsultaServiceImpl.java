@@ -5,7 +5,7 @@ import com.example.sistemadeclinica.dto.DetalhesConsultaDto;
 import com.example.sistemadeclinica.exception.EspecialidadeNaoEncontradaException;
 import com.example.sistemadeclinica.repository.ConsultaRepository;
 import com.example.sistemadeclinica.service.CancelarConsultaService;
-import com.example.sistemadeclinica.validators.CancelarConsultaValidator;
+import com.example.sistemadeclinica.validators.consulta.cancelamento.CancelarConsultaValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

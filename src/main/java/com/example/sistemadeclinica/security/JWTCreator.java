@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -96,13 +97,13 @@ public class JWTCreator {
         return null;
     }
 
-
-
-    /*public String getSubject(@NotNull String token) {
-        var algorithm = Algorithm.HMAC256(secret);
-        return JWT.require(algorithm)
-                .withIssuer(issuer)
+    public String getSubject(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
                 .build()
-                .verify(token).getSubject();
-    }*/
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
 }
