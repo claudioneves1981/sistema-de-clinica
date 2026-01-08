@@ -21,7 +21,7 @@ O objetivo do projeto é demonstrar uma arquitetura backend organizada, com sepa
 - **Java 17** – linguagem principal
 - **Spring Boot 3** – framework base da aplicação
 - **Maven** – gerenciamento de dependências e build
-- **PostGre* – banco de dados relacional
+- **PostGre** – banco de dados relacional
 - **Hibernate (JPA)** – ORM para persistência
 - **Lombok** – redução de boilerplate
 
