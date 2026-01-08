@@ -15,8 +15,8 @@ public class AgendarConsultaHorarioFuncionamentoValidator implements AgendarCons
         var data = consulta.getDataDe();
         var domingo = data.getDayOfWeek().equals(DayOfWeek.SUNDAY);
         var antesHorarioFuncionamento = data.getHour() < 7;
-        var depoisHorarioFuncionamento = data.getHour() > 18;
-        var depoisMinutosHorarioFuncionamento = (data.getHour() == 18 && data.getMinute() > 0);
+        var depoisHorarioFuncionamento = data.getHour() > 20;
+        var depoisMinutosHorarioFuncionamento = (data.getHour() == 20 && data.getMinute() > 0);
 
         if (domingo || antesHorarioFuncionamento || depoisHorarioFuncionamento || depoisMinutosHorarioFuncionamento) {
             throw new ValidationException("A consulta deve ser agendada dentro do hórario de funcionamento!");

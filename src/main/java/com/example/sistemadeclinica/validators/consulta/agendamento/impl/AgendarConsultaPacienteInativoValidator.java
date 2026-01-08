@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AgendarConsultaPacienteInativoValidator implements AgendarConsultaValidator {
 
-    private PacienteRepository pacienteRepository;
+    private final PacienteRepository pacienteRepository;
 
     @Override
     public void validate(Consulta consulta) throws ValidationException {

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AgendarConsultaPacienteMesmoDiaValidator implements AgendarConsultaValidator {
 
-    private ConsultaRepository consultaRepository;
+    private final ConsultaRepository consultaRepository;
 
     @Override
     public void validate(Consulta consulta) throws ValidationException {
         var primeiroHorario = consulta.getDataDe().withHour(7);
-        var ultimoHorario = consulta.getDataDe().withHour(18);
+        var ultimoHorario = consulta.getDataDe().withHour(20);
         if(consultaRepository.existsByPacienteIdAndDataDeBetween(consulta.getPaciente().getId(), primeiroHorario, ultimoHorario)) {
             throw new ValidationException("Não é possivel agendar mais de uma consulta por paciente!");
         }
