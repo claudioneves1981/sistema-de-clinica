@@ -18,10 +18,10 @@ public class SwaggerConfig {
                         .addSecuritySchemes("bearer-key",
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
                 .info(new Info()
-                        .title("Voll.med API")
-                        .description("API Rest da aplicação Voll.med, contendo as funcionalidades de CRUD de médicos e de pacientes, além de agendamento e cancelamento de consultas")
+                        .title("Sistema Clinica API")
+                        .description("API Rest da aplicação Sistema Clinica API, contendo as funcionalidades de CRUD de médicos e de pacientes, além de agendamento e cancelamento de consultas")
                         .contact(new Contact()
-                                .name("Time Backend")
-                                .email("backend@voll.med")));
+                                .name("Cláudio Neves")
+                                .email("cfneguacu@hotmail.com")));
     }
 }
