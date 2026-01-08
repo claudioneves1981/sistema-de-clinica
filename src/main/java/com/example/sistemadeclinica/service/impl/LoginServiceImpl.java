@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     @Override
     public UserResponseDto create(LoginDto loginDto) {
-        if (usuarioRepository.existsByUsuario(loginDto.login())) {
+        if (usuarioRepository.existsByLogin(loginDto.login())) {
             throw new UsuarioJaExisteException(loginDto.login());
         }
         Usuario user = UsuarioMapper.toEntity(loginDto);

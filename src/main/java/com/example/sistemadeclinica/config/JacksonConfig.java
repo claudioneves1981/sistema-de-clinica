@@ -19,7 +19,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
-@Configuration
+/*@Configuration
 public class JacksonConfig {
 
     private static final String TIME_ZONE = "America/Sao_Paulo";
@@ -59,4 +59,4 @@ public class JacksonConfig {
 
         return mapper;
     }
-}
+}*/
