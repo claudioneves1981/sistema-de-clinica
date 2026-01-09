@@ -26,7 +26,6 @@ public class MedicoController {
     private final MedicoService medicoService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesMedicoDto> create(@RequestBody @Valid CriarMedicoDto criarMedicoDto, UriComponentsBuilder uriComponentsBuilder) {
         var medico = medicoService.criar(criarMedicoDto);
         var uri = uriComponentsBuilder.path("/medico/{idConsulta}").buildAndExpand(medico.id()).toUri();
@@ -34,28 +33,24 @@ public class MedicoController {
     }
 
     @GetMapping
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<PagedModel<ItemListaMedicoDto>> getList(Pageable pageable) {
         var pagedModel = medicoService.getList(pageable);
         return ResponseEntity.ok(pagedModel);
     }
 
     @GetMapping("/{idConsulta}")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesMedicoDto> getById(@PathVariable Long idConsulta) {
         var medico = medicoService.getById(idConsulta);
         return ResponseEntity.ok(medico);
     }
 
     @PutMapping
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesMedicoDto> update(@RequestBody @Valid AtualizarMedicoDto medicoUpdateDto) {
         var medico = medicoService.update(medicoUpdateDto);
         return ResponseEntity.ok(medico);
     }
 
     @DeleteMapping("/{idConsulta}")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> delete(@PathVariable Long idConsulta) {
         medicoService.delete(idConsulta);
         return ResponseEntity.noContent().build();

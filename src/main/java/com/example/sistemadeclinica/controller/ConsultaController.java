@@ -25,13 +25,11 @@ public class ConsultaController {
     private final CancelarConsultaService cancelarConsultaService;
 
     @GetMapping("/{idConsulta}")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesConsultaDto> detalhes(@PathVariable Long idConsulta) {
         return ResponseEntity.ok(detalhesConsultaService.getById(idConsulta));
     }
 
     @PostMapping("/agendamento")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesConsultaDto> agendar(@RequestBody @Valid AgendarConsultaDto agendarConsultaDto, UriComponentsBuilder uriComponentsBuilder) {
         var detalhes = agendarConsultaService.agendar(agendarConsultaDto);
         var uri = uriComponentsBuilder.path("/consulta/{idConsulta}").buildAndExpand(detalhes.id()).toUri();
@@ -39,7 +37,6 @@ public class ConsultaController {
     }
 
     @PostMapping("/cancelamento")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<DetalhesConsultaDto> cancelar(@RequestBody @Valid CancelarConsultaDto cancelarConsultaDto) {
         var detalhes = cancelarConsultaService.cancelar(cancelarConsultaDto);
         return ResponseEntity.ok(detalhes);
